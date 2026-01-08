@@ -16,4 +16,10 @@ interface MovieDao {
 
     @Query("SELECT * FROM movies WHERE isNowPlaying = 1")
     fun getNowPlayingMovies(): Flow<List<MovieEntity>>
+
+    @Transaction
+    suspend fun updateMoviesTransaction(trending: List<MovieEntity>, nowPlaying: List<MovieEntity>) {
+        insertMovies(trending)
+        insertMovies(nowPlaying)
+    }
 }

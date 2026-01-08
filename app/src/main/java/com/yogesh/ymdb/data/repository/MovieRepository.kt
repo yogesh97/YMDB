@@ -2,8 +2,13 @@ package com.yogesh.ymdb.data.repository
 
 import android.util.Log
 import com.yogesh.ymdb.data.local.MovieDao
+import com.yogesh.ymdb.data.local.MovieEntity
 import com.yogesh.ymdb.data.mapper.toEntity
 import com.yogesh.ymdb.data.remote.TMDBApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 
 
 class MovieRepository(
@@ -11,24 +16,32 @@ class MovieRepository(
     private val movieDao: MovieDao
 ) {
     fun getTrendingMovies() = movieDao.getTrendingMovies()
-
     fun getNowPlayingMovies() = movieDao.getNowPlayingMovies()
 
     suspend fun refreshMovies() {
-        try {
-            val trendingResponse = apiService.getTrendingMovies()
-            val trendingEntities = trendingResponse.results.map {
-                it.toEntity(isTrending = true, isNowPlaying = false)
-            }
-            movieDao.insertMovies(trendingEntities)
+        withContext(Dispatchers.IO) {
+            try {
+                coroutineScope {
+                    val trendingDeferred = async { apiService.getTrendingMovies() }
+                    val nowPlayingDeferred = async { apiService.getNowPlayingMovies() }
+                    val trendingResponse = trendingDeferred.await()
+                    val nowPlayingResponse = nowPlayingDeferred.await()
 
-            val nowPlayingResponse = apiService.getNowPlayingMovies()
-            val nowPlayingEntities = nowPlayingResponse.results.map {
-                it.toEntity(isTrending = false, isNowPlaying = true)
+                    val trendingEntities = trendingResponse.results.map {
+                        it.toEntity(isTrending = true, isNowPlaying = false)
+                    }
+                    val nowPlayingEntities = nowPlayingResponse.results.map {
+                        it.toEntity(isTrending = false, isNowPlaying = true)
+                    }
+                    updateLocalDatabase(trendingEntities, nowPlayingEntities)
+                }
+            } catch (e: Exception) {
+                Log.e("MovieRepository", "refreshMovies: Exception:", e)
             }
-            movieDao.insertMovies(nowPlayingEntities)
-        } catch (e: Exception) {
-            Log.e("MovieRepository", "refreshMovies: Exception:", e)
         }
+    }
+
+    private suspend fun updateLocalDatabase(trending: List<MovieEntity>, nowPlaying: List<MovieEntity>) {
+        movieDao.updateMoviesTransaction(trending, nowPlaying)
     }
 }
