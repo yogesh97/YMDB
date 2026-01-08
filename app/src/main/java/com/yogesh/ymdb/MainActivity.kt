@@ -2,24 +2,24 @@ package com.yogesh.ymdb
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.yogesh.ymdb.data.repository.MovieRepository
 import com.yogesh.ymdb.databinding.ActivityMainBinding
-import com.yogesh.ymdb.network.RetrofitClient
 import com.yogesh.ymdb.ui.movies.MovieAdapter
 import com.yogesh.ymdb.ui.movies.MovieViewModel
-import com.yogesh.ymdb.ui.movies.MovieViewModelFactory
 import com.yogesh.ymdb.ui.movies.MoviesUiState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MovieViewModel
+    private val viewModel: MovieViewModel by viewModels()
 
     val trendingAdapter = MovieAdapter { movie ->
     }
@@ -37,17 +37,6 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val database = androidx.room.Room.databaseBuilder(
-            applicationContext,
-            com.yogesh.ymdb.data.local.YMDBDatabase::class.java, "ymdb_db"
-        ).build()
-
-        val apiService = RetrofitClient.instance
-        val repository = MovieRepository(apiService, database.movieDao())
-
-        val factory = MovieViewModelFactory(repository)
-        viewModel = androidx.lifecycle.ViewModelProvider(this, factory)[MovieViewModel::class.java]
 
         observeUiState()
 

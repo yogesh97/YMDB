@@ -9,9 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class MovieRepository(
+@Singleton
+class MovieRepository @Inject constructor(
     private val apiService: TMDBApiService,
     private val movieDao: MovieDao
 ) {

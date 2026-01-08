@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp") version "2.0.21-1.0.25"
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -55,16 +56,14 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
-
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
-
+    implementation(libs.hilt.android)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-
     implementation(libs.glide)
-
+    ksp(libs.androidx.room.compiler)
+    ksp(libs.hilt.android.compiler)
     ksp(libs.androidx.room.compiler) {
         exclude(group = "com.intellij", module = "annotations")
     }
