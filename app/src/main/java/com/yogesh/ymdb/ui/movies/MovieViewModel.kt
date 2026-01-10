@@ -24,14 +24,25 @@ class MovieViewModel @Inject constructor(private val repository: MovieRepository
                 repository.getTrendingMovies(),
                 repository.getNowPlayingMovies()
             ) { trending, nowPlaying ->
-                if (trending.isEmpty() && nowPlaying.isEmpty()) {
-                    repository.refreshMovies()
+                if (trending.isNotEmpty() || nowPlaying.isNotEmpty()) {
+                    MoviesUiState.Success(trending, nowPlaying)
+                } else {
+                    MoviesUiState.Loading
                 }
-                MoviesUiState.Success(trending, nowPlaying)
             }.catch { e ->
                 _uiState.value = MoviesUiState.Error(e.message ?: "Unknown Error")
             }.collect { state ->
                 _uiState.value = state
+            }
+        }
+
+        viewModelScope.launch {
+            try {
+                repository.refreshMovies()
+            } catch (e: Exception) {
+                if (_uiState.value is MoviesUiState.Loading) {
+                    _uiState.value = MoviesUiState.Error("No Internet Connection")
+                }
             }
         }
     }

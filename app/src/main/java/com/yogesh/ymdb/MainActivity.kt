@@ -6,8 +6,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.yogesh.ymdb.databinding.ActivityMainBinding
 import com.yogesh.ymdb.ui.movies.MovieAdapter
 import com.yogesh.ymdb.ui.movies.MovieViewModel
@@ -45,14 +49,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeUiState() {
         lifecycleScope.launch {
-            viewModel.uiState.collect { state ->
-                when (state) {
-                    is MoviesUiState.Loading -> {  }
-                    is MoviesUiState.Success -> {
-                        trendingAdapter.submitList(state.trending)
-                        nowPlayingAdapter.submitList(state.nowPlaying)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    binding.progressBar.isVisible = state is MoviesUiState.Loading
+                    when (state) {
+                        is MoviesUiState.Success -> {
+                            trendingAdapter.submitList(state.trending)
+                            nowPlayingAdapter.submitList(state.nowPlaying)
+                        }
+                        is MoviesUiState.Error -> {
+                            Snackbar.make(
+                                binding.root, state.message,
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                        else -> Unit
                     }
-                    is MoviesUiState.Error -> {  }
                 }
             }
         }
