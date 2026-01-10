@@ -47,15 +47,28 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupToolbar()
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         observeUiState()
-
         setupRecyclerViews()
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_search -> {
+                    true
+                }
+                R.id.action_bookmarks -> {
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun observeUiState() {
