@@ -14,11 +14,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.yogesh.ymdb.databinding.ActivityMainBinding
-import com.yogesh.ymdb.ui.details.MovieDetailsActivity
 import com.yogesh.ymdb.ui.movies.MovieAdapter
 import com.yogesh.ymdb.ui.movies.MovieViewModel
 import com.yogesh.ymdb.ui.movies.MoviesUiState
 import com.yogesh.ymdb.ui.saved.SavedMoviesActivity
+import com.yogesh.ymdb.ui.search.SearchActivity
+import com.yogesh.ymdb.util.openMovieDetails
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,20 +29,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MovieViewModel by viewModels()
 
-    val trendingAdapter = MovieAdapter { movie ->
-        navigateToDetails(movie.id)
-    }
-
-    val nowPlayingAdapter = MovieAdapter { movie ->
-        navigateToDetails(movie.id)
-    }
-
-    private fun navigateToDetails(movieId: Int) {
-        val intent = Intent(this, MovieDetailsActivity::class.java).apply {
-            putExtra("EXTRA_MOVIE_ID", movieId)
-        }
-        startActivity(intent)
-    }
+    val trendingAdapter = MovieAdapter { movie -> openMovieDetails(movie) }
+    val nowPlayingAdapter = MovieAdapter { movie -> openMovieDetails(movie) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +51,11 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_search -> {
+                    startActivity(Intent(this, SearchActivity::class.java))
                     true
                 }
                 R.id.action_bookmarks -> {
                     startActivity(Intent(this, SavedMoviesActivity::class.java))
-                    true
                     true
                 }
                 else -> false

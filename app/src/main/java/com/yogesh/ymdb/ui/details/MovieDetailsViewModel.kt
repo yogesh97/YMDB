@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yogesh.ymdb.data.local.MovieEntity
 import com.yogesh.ymdb.data.repository.MovieRepository
+import com.yogesh.ymdb.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,11 @@ class MovieDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 repository.getMovieById(movieId).collect { movie ->
-                    _movieDetails.value = MovieDetailsUiState.Success(movie)
+                    if (movie != null) {
+                        _movieDetails.value = MovieDetailsUiState.Success(movie)
+                    } else {
+                        repository.fetchAndSaveMovieDetails(movieId)
+                    }
                 }
             } catch (e: Exception) {
                 _movieDetails.value = MovieDetailsUiState.Error(e.message ?: "Failed to load details")
@@ -37,7 +42,7 @@ class MovieDetailsViewModel @Inject constructor(
             try {
                 repository.toggleBookmark(movie.id, movie.isBookmarked)
             } catch (e: Exception) {
-                Log.e("MovieDetailsViewModel", "toggleBookmark: Exception:", e)
+                Log.e(TAG, "toggleBookmark: Exception:", e)
             }
         }
     }

@@ -1,13 +1,11 @@
 package com.yogesh.ymdb.ui.saved
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.yogesh.ymdb.databinding.ActivitySavedMoviesBinding
-import com.yogesh.ymdb.ui.details.MovieDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.yogesh.ymdb.R
 import com.yogesh.ymdb.ui.movies.MovieAdapter
+import com.yogesh.ymdb.util.openMovieDetails
 
 @AndroidEntryPoint
 class SavedMoviesActivity : AppCompatActivity() {
@@ -45,12 +44,7 @@ class SavedMoviesActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = MovieAdapter { movie ->
-            val intent = Intent(this, MovieDetailsActivity::class.java).apply {
-                putExtra("EXTRA_MOVIE_ID", movie.id)
-            }
-            startActivity(intent)
-        }
+        adapter = MovieAdapter { movie -> openMovieDetails(movie) }
         binding.rvSavedMovies.adapter = adapter
     }
 

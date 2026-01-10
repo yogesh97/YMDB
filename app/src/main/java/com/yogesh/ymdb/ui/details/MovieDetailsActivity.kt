@@ -1,6 +1,7 @@
 package com.yogesh.ymdb.ui.details
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.yogesh.ymdb.R
 import com.yogesh.ymdb.databinding.ActivityMovieDetailsBinding
+import com.yogesh.ymdb.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -66,7 +68,16 @@ class MovieDetailsActivity : AppCompatActivity() {
                             }
                         }
                         is MovieDetailsUiState.Error -> {
-                            Toast.makeText(this@MovieDetailsActivity, state.message, Toast.LENGTH_SHORT).show()
+                            binding.progressBar.isVisible = false
+                            Toast.makeText(
+                                this@MovieDetailsActivity,
+                                "Error loading movie detail",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e(
+                                TAG,
+                                "observeViewModel: error=" + state.message
+                            )
                         }
                         else -> Unit
                     }

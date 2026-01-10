@@ -49,7 +49,6 @@ object NetworkModule {
             YMDBDatabase::class.java,
             "ymdb_database"
         )
-            .fallbackToDestructiveMigration()
             .build()
     }
 
