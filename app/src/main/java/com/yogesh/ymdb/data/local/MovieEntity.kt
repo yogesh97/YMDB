@@ -12,5 +12,6 @@ data class MovieEntity(
     val backdropPath: String?,
     val releaseDate: String,
     val isTrending: Boolean = false,
-    val isNowPlaying: Boolean = false
+    val isNowPlaying: Boolean = false,
+    val isBookmarked: Boolean = false
 )

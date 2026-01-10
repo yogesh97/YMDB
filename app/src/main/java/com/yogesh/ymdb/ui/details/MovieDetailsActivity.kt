@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
+import com.yogesh.ymdb.R
 import com.yogesh.ymdb.databinding.ActivityMovieDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -46,6 +47,15 @@ class MovieDetailsActivity : AppCompatActivity() {
                             Glide.with(this@MovieDetailsActivity)
                                 .load("https://image.tmdb.org/t/p/w780${movie.backdropPath}")
                                 .into(binding.ivBackdrop)
+
+                            if (movie.isBookmarked) {
+                                binding.btnBookmark.setImageResource(R.drawable.bookmark_added)
+                            } else {
+                                binding.btnBookmark.setImageResource(R.drawable.bookmark_add)
+                            }
+                            binding.btnBookmark.setOnClickListener {
+                                viewModel.toggleBookmark(movie)
+                            }
                         }
                         is MovieDetailsUiState.Error -> {
                             Toast.makeText(this@MovieDetailsActivity, state.message, Toast.LENGTH_SHORT).show()

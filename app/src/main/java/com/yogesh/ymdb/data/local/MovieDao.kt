@@ -24,5 +24,8 @@ interface MovieDao {
     }
 
     @Query("SELECT * FROM movies WHERE id = :movieId")
-    suspend fun getMovieById(movieId: Int): MovieEntity
+    fun getMovieById(movieId: Int): Flow<MovieEntity>
+
+    @Query("UPDATE movies SET isBookmarked = :isBookmarked WHERE id = :movieId")
+    suspend fun updateBookmarkStatus(movieId: Int, isBookmarked: Boolean)
 }

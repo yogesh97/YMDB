@@ -8,6 +8,7 @@ import com.yogesh.ymdb.data.remote.TMDBApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -48,7 +49,11 @@ class MovieRepository @Inject constructor(
         movieDao.updateMoviesTransaction(trending, nowPlaying)
     }
 
-    suspend fun getMovieById(movieId: Int): MovieEntity {
+    fun getMovieById(movieId: Int): Flow<MovieEntity> {
         return movieDao.getMovieById(movieId)
+    }
+
+    suspend fun toggleBookmark(movieId: Int, currentStatus: Boolean) {
+        movieDao.updateBookmarkStatus(movieId, !currentStatus)
     }
 }
