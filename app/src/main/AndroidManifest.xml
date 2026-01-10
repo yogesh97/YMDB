@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YMDB">
         <activity
+            android:name=".ui.saved.SavedMoviesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.details.MovieDetailsActivity"
             android:exported="false" />
         <activity

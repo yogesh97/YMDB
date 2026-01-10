@@ -18,6 +18,7 @@ import com.yogesh.ymdb.ui.details.MovieDetailsActivity
 import com.yogesh.ymdb.ui.movies.MovieAdapter
 import com.yogesh.ymdb.ui.movies.MovieViewModel
 import com.yogesh.ymdb.ui.movies.MoviesUiState
+import com.yogesh.ymdb.ui.saved.SavedMoviesActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -64,6 +65,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.action_bookmarks -> {
+                    startActivity(Intent(this, SavedMoviesActivity::class.java))
+                    true
                     true
                 }
                 else -> false

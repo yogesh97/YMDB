@@ -56,4 +56,6 @@ class MovieRepository @Inject constructor(
     suspend fun toggleBookmark(movieId: Int, currentStatus: Boolean) {
         movieDao.updateBookmarkStatus(movieId, !currentStatus)
     }
+
+    fun getBookmarkedMovies() = movieDao.getBookmarkedMovies()
 }
