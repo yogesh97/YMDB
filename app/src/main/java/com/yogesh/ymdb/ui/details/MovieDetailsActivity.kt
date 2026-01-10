@@ -1,0 +1,59 @@
+package com.yogesh.ymdb.ui.details
+
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
+import com.yogesh.ymdb.databinding.ActivityMovieDetailsBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+
+@AndroidEntryPoint
+class MovieDetailsActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMovieDetailsBinding
+    private val viewModel: MovieDetailsViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMovieDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val movieId = intent.getIntExtra("EXTRA_MOVIE_ID", -1)
+        if (movieId != -1) {
+            viewModel.fetchMovieDetails(movieId)
+        }
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.movieDetails.collect { state ->
+                    binding.progressBar.isVisible = state is MovieDetailsUiState.Loading
+                    when (state) {
+                        is MovieDetailsUiState.Success -> {
+                            val movie = state.movie
+                            binding.tvTitle.text = movie.title
+                            binding.tvOverview.text = movie.overview
+
+                            Glide.with(this@MovieDetailsActivity)
+                                .load("https://image.tmdb.org/t/p/w780${movie.backdropPath}")
+                                .into(binding.ivBackdrop)
+                        }
+                        is MovieDetailsUiState.Error -> {
+                            Toast.makeText(this@MovieDetailsActivity, state.message, Toast.LENGTH_SHORT).show()
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+        }
+    }
+}

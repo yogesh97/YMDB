@@ -9,6 +9,7 @@ fun MovieDto.toEntity(isTrending: Boolean, isNowPlaying: Boolean): MovieEntity {
         title = this.title,
         overview = this.overview,
         posterPath = this.posterPath,
+        backdropPath = this.backdropPath,
         releaseDate = this.releaseDate,
         isTrending = isTrending,
         isNowPlaying = isNowPlaying

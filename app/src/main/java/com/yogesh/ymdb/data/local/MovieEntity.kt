@@ -9,6 +9,7 @@ data class MovieEntity(
     val title: String,
     val overview: String,
     val posterPath: String?,
+    val backdropPath: String?,
     val releaseDate: String,
     val isTrending: Boolean = false,
     val isNowPlaying: Boolean = false

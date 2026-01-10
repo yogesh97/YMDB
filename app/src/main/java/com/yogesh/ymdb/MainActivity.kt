@@ -1,5 +1,6 @@
 package com.yogesh.ymdb
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -13,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.yogesh.ymdb.databinding.ActivityMainBinding
+import com.yogesh.ymdb.ui.details.MovieDetailsActivity
 import com.yogesh.ymdb.ui.movies.MovieAdapter
 import com.yogesh.ymdb.ui.movies.MovieViewModel
 import com.yogesh.ymdb.ui.movies.MoviesUiState
@@ -26,9 +28,18 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MovieViewModel by viewModels()
 
     val trendingAdapter = MovieAdapter { movie ->
+        navigateToDetails(movie.id)
     }
 
     val nowPlayingAdapter = MovieAdapter { movie ->
+        navigateToDetails(movie.id)
+    }
+
+    private fun navigateToDetails(movieId: Int) {
+        val intent = Intent(this, MovieDetailsActivity::class.java).apply {
+            putExtra("EXTRA_MOVIE_ID", movieId)
+        }
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,13 +85,15 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             rvTrending.apply {
                 setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+                layoutManager =
+                    LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
                 adapter = trendingAdapter
             }
 
             rvNowPlaying.apply {
                 setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+                layoutManager =
+                    LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
                 adapter = nowPlayingAdapter
             }
         }

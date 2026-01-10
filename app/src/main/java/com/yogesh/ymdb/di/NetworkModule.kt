@@ -48,7 +48,9 @@ object NetworkModule {
             context,
             YMDBDatabase::class.java,
             "ymdb_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

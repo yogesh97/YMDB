@@ -22,4 +22,7 @@ interface MovieDao {
         insertMovies(trending)
         insertMovies(nowPlaying)
     }
+
+    @Query("SELECT * FROM movies WHERE id = :movieId")
+    suspend fun getMovieById(movieId: Int): MovieEntity
 }

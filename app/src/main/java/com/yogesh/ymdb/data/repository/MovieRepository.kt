@@ -47,4 +47,8 @@ class MovieRepository @Inject constructor(
     private suspend fun updateLocalDatabase(trending: List<MovieEntity>, nowPlaying: List<MovieEntity>) {
         movieDao.updateMoviesTransaction(trending, nowPlaying)
     }
+
+    suspend fun getMovieById(movieId: Int): MovieEntity {
+        return movieDao.getMovieById(movieId)
+    }
 }
