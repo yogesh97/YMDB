@@ -22,4 +22,8 @@ class SearchViewModel @Inject constructor(private val repository: MovieRepositor
             _searchResults.value = repository.searchMovies(query)
         }
     }
+
+    fun clearResults() {
+        _searchResults.value = emptyList<MovieEntity>()
+    }
 }

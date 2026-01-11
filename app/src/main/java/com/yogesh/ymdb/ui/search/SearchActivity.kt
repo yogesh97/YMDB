@@ -1,7 +1,6 @@
 package com.yogesh.ymdb.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.yogesh.ymdb.databinding.ActivitySearchBinding
 import com.yogesh.ymdb.ui.movies.MovieAdapter
-import com.yogesh.ymdb.util.TAG
 import com.yogesh.ymdb.util.applySystemBarsPadding
 import com.yogesh.ymdb.util.openMovieDetails
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -23,6 +23,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private val viewModel: SearchViewModel by viewModels()
     private lateinit var adapter: MovieAdapter
+    private var searchJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrBlank()) {
+                    searchJob?.cancel()
                     viewModel.search(query)
                 }
                 binding.searchView.clearFocus()
@@ -47,16 +49,24 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                Log.d(TAG, "onQueryTextChange: newText=$newText")
+                searchJob?.cancel()
+
+                if (!newText.isNullOrBlank() && newText.length >= 2) {
+                    searchJob = lifecycleScope.launch {
+                        delay(500L)
+                        viewModel.search(newText)
+                    }
+
+                } else if (newText.isNullOrBlank()) {
+                    viewModel.clearResults()
+                }
                 return true
             }
         })
     }
 
     private fun setupRecyclerView() {
-        adapter = MovieAdapter { movie ->
-            openMovieDetails(movie)
-        }
+        adapter = MovieAdapter { movie -> openMovieDetails(movie) }
         binding.rvSearch.adapter = adapter
     }
 
