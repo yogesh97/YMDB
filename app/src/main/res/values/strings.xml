@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YMDB</string>
+    <string name="app_name">YMDb</string>
     <string name="trending_movie">Trending Movies</string>
     <string name="now_playing">Now Playing</string>
     <string name="no_saved_movies">No saved movies yet</string>
