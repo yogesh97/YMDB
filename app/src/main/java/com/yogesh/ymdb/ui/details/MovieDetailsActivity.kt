@@ -29,6 +29,7 @@ class MovieDetailsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMovieDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupToolbar()
         binding.main.applySystemBarsPadding()
 
         val movieId = intent.getIntExtra("EXTRA_MOVIE_ID", -1)
@@ -37,6 +38,10 @@ class MovieDetailsActivity : AppCompatActivity() {
         }
 
         observeViewModel()
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.setNavigationOnClickListener { finish() }
     }
 
     private fun observeViewModel() {

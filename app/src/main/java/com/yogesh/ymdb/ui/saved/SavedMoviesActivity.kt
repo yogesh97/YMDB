@@ -26,9 +26,9 @@ class SavedMoviesActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivitySavedMoviesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupToolbar()
         binding.main.applySystemBarsPadding()
 
-        setupToolbar()
         setupRecyclerView()
         observeViewModel()
     }

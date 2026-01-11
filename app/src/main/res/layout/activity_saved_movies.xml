@@ -19,6 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/background"
+            app:navigationIcon="@drawable/abc_ic_ab_back_material"
+            app:navigationIconTint="@color/foreground"
             app:title="Saved Movies"
             app:titleTextColor="@color/foreground" />
     </com.google.android.material.appbar.AppBarLayout>
