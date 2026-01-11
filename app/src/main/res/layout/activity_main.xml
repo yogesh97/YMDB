@@ -20,7 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/background"
             app:menu="@menu/main_menu"
-            app:title="YMDB"
+            app:title="YMDb"
             app:titleTextColor="@color/foreground" />
 
     </com.google.android.material.appbar.AppBarLayout>
