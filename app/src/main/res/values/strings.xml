@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">YMDB</string>
+    <string name="trending_movie">Trending Movies</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="no_saved_movies">No saved movies yet</string>
+    <string name="no_search_results">No movies found for your search</string>
 </resources>

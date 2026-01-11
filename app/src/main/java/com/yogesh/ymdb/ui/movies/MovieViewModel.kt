@@ -2,6 +2,7 @@ package com.yogesh.ymdb.ui.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yogesh.ymdb.data.local.MovieEntity
 import com.yogesh.ymdb.data.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -46,4 +47,10 @@ class MovieViewModel @Inject constructor(private val repository: MovieRepository
             }
         }
     }
+}
+
+sealed class MoviesUiState {
+    object Loading : MoviesUiState()
+    data class Success(val trending: List<MovieEntity>, val nowPlaying: List<MovieEntity>) : MoviesUiState()
+    data class Error(val message: String) : MoviesUiState()
 }

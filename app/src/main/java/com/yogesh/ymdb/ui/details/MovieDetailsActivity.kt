@@ -1,5 +1,6 @@
 package com.yogesh.ymdb.ui.details
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -32,9 +33,21 @@ class MovieDetailsActivity : AppCompatActivity() {
         setupToolbar()
         binding.main.applySystemBarsPadding()
 
-        val movieId = intent.getIntExtra("EXTRA_MOVIE_ID", -1)
+        var movieId = intent.getIntExtra("EXTRA_MOVIE_ID", -1)
+
+        val data = intent.data
+        if (data != null && data.pathSegments.size >= 2) {
+            val deepLinkId = data.lastPathSegment?.toIntOrNull()
+            if (deepLinkId != null) {
+                movieId = deepLinkId
+            }
+        }
+
         if (movieId != -1) {
             viewModel.fetchMovieDetails(movieId)
+        } else {
+            Toast.makeText(this, "Invalid Movie ID", Toast.LENGTH_SHORT).show()
+            finish()
         }
 
         observeViewModel()
@@ -42,6 +55,36 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener { finish() }
+
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_share -> {
+                    shareMovie()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun shareMovie() {
+        val state = viewModel.movieDetails.value
+        if (state is MovieDetailsUiState.Success) {
+            val movie = state.movie
+            val movieUrl = "https://www.themoviedb.org/movie/${movie.id}"
+            val shareText = "Check out this movie: ${movie.title}\n$movieUrl"
+
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, shareText)
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, "Share movie via")
+            startActivity(shareIntent)
+        } else {
+            Toast.makeText(this, "Movie details not ready to share", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun observeViewModel() {

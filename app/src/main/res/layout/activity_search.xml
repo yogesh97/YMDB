@@ -36,7 +36,7 @@
         android:id="@+id/tvNoResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No movies found"
+        android:text="@string/no_search_results"
         android:textColor="@color/foreground"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

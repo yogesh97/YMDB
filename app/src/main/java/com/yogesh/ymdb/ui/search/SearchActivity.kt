@@ -1,6 +1,7 @@
 package com.yogesh.ymdb.ui.search
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -73,9 +74,22 @@ class SearchActivity : AppCompatActivity() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchResults.collect { movies ->
-                    adapter.submitList(movies)
-                    binding.tvNoResults.isVisible = movies.isEmpty()
+                viewModel.searchState.collect { state ->
+                    when (state) {
+                        is SearchUiState.Initial -> {
+                            binding.tvNoResults.isVisible = false
+                            adapter.submitList(emptyList())
+                        }
+                        is SearchUiState.Success -> {
+                            adapter.submitList(state.movies)
+                            binding.tvNoResults.isVisible = state.movies.isEmpty()
+                        }
+                        is SearchUiState.Error -> {
+                            binding.tvNoResults.isVisible = false
+                            Toast.makeText(this@SearchActivity, state.message, Toast.LENGTH_SHORT).show()
+                        }
+                        else -> Unit
+                    }
                 }
             }
         }

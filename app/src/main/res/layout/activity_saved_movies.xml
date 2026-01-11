@@ -40,7 +40,7 @@
         android:id="@+id/tvEmptyState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No saved movies yet"
+        android:text="@string/no_saved_movies"
         android:textColor="@color/foreground"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
