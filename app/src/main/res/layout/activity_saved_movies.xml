@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
+    android:background="@color/background"
     tools:context=".ui.saved.SavedMoviesActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,9 +18,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#1E1E1E"
+            android:background="@color/background"
             app:title="Saved Movies"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@color/foreground" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No saved movies yet"
-        android:textColor="@android:color/white"
+        android:textColor="@color/foreground"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

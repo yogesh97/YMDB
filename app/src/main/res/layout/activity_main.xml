@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,10 +18,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#1E1E1E"
+            android:background="@color/background"
             app:menu="@menu/main_menu"
             app:title="YMDB"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@color/foreground" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Trending Movies"
-                android:textColor="@android:color/white"
+                android:textColor="@color/foreground"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Now Playing"
-                android:textColor="@android:color/white"
+                android:textColor="@color/foreground"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -77,7 +77,7 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="@android:color/white"
+        android:indeterminateTint="@color/foreground"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

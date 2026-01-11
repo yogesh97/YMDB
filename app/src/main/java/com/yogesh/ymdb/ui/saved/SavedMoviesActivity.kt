@@ -9,10 +9,8 @@ import com.yogesh.ymdb.databinding.ActivitySavedMoviesBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import androidx.activity.enableEdgeToEdge
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.yogesh.ymdb.R
 import com.yogesh.ymdb.ui.movies.MovieAdapter
+import com.yogesh.ymdb.util.applySystemBarsPadding
 import com.yogesh.ymdb.util.openMovieDetails
 
 @AndroidEntryPoint
@@ -28,11 +26,7 @@ class SavedMoviesActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivitySavedMoviesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        binding.main.applySystemBarsPadding()
 
         setupToolbar()
         setupRecyclerView()

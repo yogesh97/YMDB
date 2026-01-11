@@ -30,6 +30,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:padding="8dp"
+            android:textColor="@color/foreground"
             android:textStyle="bold"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
